@@ -48,3 +48,4 @@ models/*.bin
 # Secrets
 .env
 *.pem
+ui/.env

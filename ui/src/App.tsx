@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+
+const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000';
 import { ShieldCheck, Info, Activity, User, Zap, Fingerprint, Scale, Monitor, Terminal, Layers } from 'lucide-react';
 import StatusBar from './components/StatusBar';
 import RiskGauge from './components/RiskGauge';
@@ -44,7 +46,7 @@ const App: React.FC = () => {
     if (e) e.preventDefault();
     setLoading(true); setError(null);
     try {
-      const res = await fetch('http://localhost:8000/predict', {
+      const res = await fetch(`${API_URL}/predict`, {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       });
