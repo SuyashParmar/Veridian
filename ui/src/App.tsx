@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000';
-import { ShieldCheck, Info, Activity, User, Zap, Fingerprint, Scale, Monitor, Terminal, Layers, Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ShieldCheck, Info, Activity, User, Zap, Fingerprint, Scale, Monitor, Terminal, Layers, Star, ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 import StatusBar from './components/StatusBar';
 import RiskGauge from './components/RiskGauge';
 import FeatureChart from './components/FeatureChart';
@@ -31,6 +31,8 @@ const FAKE_REVIEWS = [
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'insight'|'whatif'|'trust'|'governance'>('insight');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [showScrollArrow, setShowScrollArrow] = useState(false);
+  const mainStageRef = useRef<HTMLElement>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string|null>(null);
   const [result, setResult] = useState<PredictionData|null>(null);
@@ -82,6 +84,12 @@ const App: React.FC = () => {
       return () => clearTimeout(t);
     }
   }, [formData.loan_amnt, formData.person_income, formData.loan_int_rate]);
+
+  const handleScroll = () => {
+    if (mainStageRef.current && mainStageRef.current.scrollTop > 50) {
+      setShowScrollArrow(false);
+    }
+  };
 
   return (
     <>
@@ -205,11 +213,21 @@ const App: React.FC = () => {
         </aside>
 
         {/* Main Stage */}
-        <main className="main-stage">
+        <main className="main-stage" ref={mainStageRef} onScroll={handleScroll}>
+          {showScrollArrow && result && (
+            <div className="scroll-indicator fade-up">
+              <span style={{ fontSize: '10px', fontWeight: 800, letterSpacing: '0.2em', textTransform: 'uppercase' }}>Scroll To View</span>
+              <ChevronDown size={20} className="bounce-arrow" />
+            </div>
+          )}
+
           {/* Nav */}
           <div style={{ display:'flex', gap:'0.5rem', marginBottom:'2rem' }}>
             {(['insight','whatif','trust','governance'] as const).map(tab => (
-              <button key={tab} onClick={() => setActiveTab(tab)} className={`nav-tab ${activeTab===tab?'active':''}`}>
+              <button key={tab} onClick={() => {
+                setActiveTab(tab);
+                if (tab !== 'insight' && result) setShowScrollArrow(true);
+              }} className={`nav-tab ${activeTab===tab?'active':''}`}>
                 {tab === 'insight' ? 'Insight' : tab === 'whatif' ? 'Simulator' : tab === 'trust' ? 'X-Ray' : 'Logs'}
               </button>
             ))}
