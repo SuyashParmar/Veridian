@@ -102,7 +102,7 @@ const App: React.FC = () => {
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} style={{ display:'flex', flexDirection:'column', gap:'0' }}>
+          <form onSubmit={handleSubmit} className="sidebar-form">
             <div className="sidebar-section-label">
               <User size={10} /> Applicant Profile
             </div>
@@ -209,8 +209,15 @@ const App: React.FC = () => {
           {!result && !loading && (
             <div className="fade-up" style={{ height:'60vh', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', textAlign:'center', gap:'1rem' }}>
               <Layers size={60} style={{ color:'#27272a', animation:'none' }} strokeWidth={1} />
-              <h2 style={{ margin:0, fontSize:'22px', fontWeight:800, letterSpacing:'-0.5px' }}>AUTHENTICATION REQUIRED</h2>
-              <p style={{ margin:0, fontSize:'13px', color:'var(--text-dim)', maxWidth:'320px', lineHeight:1.6 }}>Input applicant parameters and trigger a scan to initialize intelligence feedback.</p>
+              <h2 style={{ margin:0, fontSize:'22px', fontWeight:800, letterSpacing:'-0.5px' }}>
+                {activeTab === 'insight' ? 'AUTHENTICATION REQUIRED' : 
+                 activeTab === 'whatif' ? 'SIMULATOR OFFLINE' : 
+                 activeTab === 'trust' ? 'X-RAY OFFLINE' : 'LOGS UNAVAILABLE'}
+              </h2>
+              <p style={{ margin:0, fontSize:'13px', color:'var(--text-dim)', maxWidth:'320px', lineHeight:1.6 }}>
+                {activeTab === 'insight' ? 'Input applicant parameters and trigger a scan to initialize intelligence feedback.' :
+                 `Run a profile scan first to access the ${activeTab === 'whatif' ? 'Simulator' : activeTab === 'trust' ? 'X-Ray' : 'Governance Logs'} panel.`}
+              </p>
             </div>
           )}
 
