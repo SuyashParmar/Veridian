@@ -289,7 +289,7 @@ const App: React.FC = () => {
               {/* Hero Decision Card */}
               <div className="glass-dossier" style={{ padding:'2.5rem', position:'relative', overflow:'hidden' }}>
                 <span style={{ position:'absolute', top:'1.25rem', right:'1.5rem', fontSize:'9px', fontWeight:800, color:'var(--text-muted)', letterSpacing:'0.4em', textTransform:'uppercase' }}>VERIDIAN v2.0</span>
-                <div style={{ display:'flex', flexWrap:'wrap', gap:'3rem', alignItems:'center' }}>
+                <div className="hero-grid">
                   <div>
                     <div style={{ display:'flex', alignItems:'center', gap:'0.5rem', marginBottom:'0.5rem' }}>
                       <Zap size={12} style={{ color: result.prediction==='Approved' ? 'var(--accent-emerald)' : 'var(--accent-rose)' }} />
@@ -313,7 +313,7 @@ const App: React.FC = () => {
               </div>
 
               {/* Analysis Grid */}
-              <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'1.5rem' }}>
+              <div className="analysis-grid">
                 {/* Narrative */}
                 <div className="glass-dossier" style={{ padding:'2rem', display:'flex', flexDirection:'column', gap:'1.25rem' }}>
                   <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between' }}>
@@ -352,8 +352,8 @@ const App: React.FC = () => {
 
               {/* Simulator Tab */}
               {activeTab === 'whatif' && (
-                <div className="glass-dossier fade-up" style={{ padding:'2rem' }}>
-                  <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'3rem' }}>
+                <div className="glass-dossier fade-up simulator-panel">
+                  <div className="simulator-grid">
                     <div style={{ display:'flex', flexDirection:'column', gap:'1.5rem' }}>
                       <div>
                         <h3 style={{ margin:'0 0 0.5rem', fontSize:'11px', fontWeight:800, textTransform:'uppercase', letterSpacing:'0.25em', color:'var(--accent-indigo)' }}>Adaptive Stress Testing</h3>
@@ -405,7 +405,7 @@ const App: React.FC = () => {
 
               {/* X-Ray Tab */}
               {activeTab === 'trust' && (
-                <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:'1.5rem' }} className="fade-up">
+                <div className="fade-up xray-grid">
                   <div className="glass-dossier" style={{ padding:'2rem', display:'flex', flexDirection:'column', gap:'1.25rem' }}>
                     <div style={{ display:'flex', alignItems:'center', gap:'0.75rem' }}>
                       <Fingerprint size={16} style={{ color:'var(--accent-cyan)' }} />
