@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000';
-import { ShieldCheck, Info, Activity, User, Zap, Fingerprint, Scale, Monitor, Terminal, Layers } from 'lucide-react';
+import { ShieldCheck, Info, Activity, User, Zap, Fingerprint, Scale, Monitor, Terminal, Layers, Star } from 'lucide-react';
 import StatusBar from './components/StatusBar';
 import RiskGauge from './components/RiskGauge';
 import FeatureChart from './components/FeatureChart';
@@ -19,6 +19,14 @@ interface PredictionData {
   counterfactuals?: { current_prob: number; recommendations: CounterfactualRecommendation[]; can_be_approved: boolean; };
   model_version: string;
 }
+
+const FAKE_REVIEWS = [
+  { id: 1, name: 'Elena R.', role: 'Risk Analyst', text: '"Veridian cut our profile scan times by 80%. The interpretable AI is a game changer for compliance."', img: 'https://i.pravatar.cc/150?img=44' },
+  { id: 2, name: 'Marcus T.', role: 'Operations VP', text: '"Finally, a platform that doesn\'t feel like a black box. The What-If Simulator is incredible for our underwriters."', img: 'https://i.pravatar.cc/150?img=11' },
+  { id: 3, name: 'Sarah L.', role: 'Compliance', text: '"The bias detection metrics give us exactly what we need for regulatory audits. Highly recommend."', img: 'https://i.pravatar.cc/150?img=5' },
+  { id: 4, name: 'David K.', role: 'Fintech Founder', text: '"Seamless integration and instantaneous decisions. Our approval pipeline is faster and fairer than ever."', img: 'https://i.pravatar.cc/150?img=33' },
+  { id: 5, name: 'Jessica M.', role: 'Chief Risk Officer', text: '"We use the X-Ray feature daily. It identifies out-of-distribution profiles before they cause damage."', img: 'https://i.pravatar.cc/150?img=47' },
+];
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'insight'|'whatif'|'trust'|'governance'>('insight');
@@ -207,17 +215,42 @@ const App: React.FC = () => {
           )}
 
           {!result && !loading && (
-            <div className="fade-up" style={{ height:'60vh', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', textAlign:'center', gap:'1rem' }}>
-              <Layers size={60} style={{ color:'#27272a', animation:'none' }} strokeWidth={1} />
-              <h2 style={{ margin:0, fontSize:'22px', fontWeight:800, letterSpacing:'-0.5px' }}>
-                {activeTab === 'insight' ? 'AUTHENTICATION REQUIRED' : 
-                 activeTab === 'whatif' ? 'SIMULATOR OFFLINE' : 
-                 activeTab === 'trust' ? 'X-RAY OFFLINE' : 'LOGS UNAVAILABLE'}
-              </h2>
-              <p style={{ margin:0, fontSize:'13px', color:'var(--text-dim)', maxWidth:'320px', lineHeight:1.6 }}>
-                {activeTab === 'insight' ? 'Input applicant parameters and trigger a scan to initialize intelligence feedback.' :
-                 `Run a profile scan first to access the ${activeTab === 'whatif' ? 'Simulator' : activeTab === 'trust' ? 'X-Ray' : 'Governance Logs'} panel.`}
-              </p>
+            <div className="fade-up" style={{ height:'100%', position:'relative', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', textAlign:'center', gap:'1rem' }}>
+              <div style={{ transform: 'translateY(-60px)' }}>
+                <Layers size={60} style={{ color:'#27272a', animation:'none', margin:'0 auto 1rem' }} strokeWidth={1} />
+                <h2 style={{ margin:0, fontSize:'22px', fontWeight:800, letterSpacing:'-0.5px' }}>
+                  {activeTab === 'insight' ? 'AUTHENTICATION REQUIRED' : 
+                   activeTab === 'whatif' ? 'SIMULATOR OFFLINE' : 
+                   activeTab === 'trust' ? 'X-RAY OFFLINE' : 'LOGS UNAVAILABLE'}
+                </h2>
+                <p style={{ margin:'1rem auto 0', fontSize:'13px', color:'var(--text-dim)', maxWidth:'320px', lineHeight:1.6 }}>
+                  {activeTab === 'insight' ? 'Input applicant parameters and trigger a scan to initialize intelligence feedback.' :
+                   `Run a profile scan first to access the ${activeTab === 'whatif' ? 'Simulator' : activeTab === 'trust' ? 'X-Ray' : 'Governance Logs'} panel.`}
+                </p>
+              </div>
+
+              {/* Reviews Marquee */}
+              <div className="reviews-marquee-wrapper">
+                <div className="reviews-marquee">
+                  {[...FAKE_REVIEWS, ...FAKE_REVIEWS].map((review, idx) => (
+                    <div key={idx} className="review-card">
+                      <div className="review-header">
+                        <img src={review.img} alt={review.name} className="review-avatar" />
+                        <div style={{ textAlign: 'left' }}>
+                          <div style={{ fontSize: '12px', fontWeight: 700, color: 'var(--text-white)' }}>{review.name}</div>
+                          <div style={{ fontSize: '9px', color: 'var(--text-dim)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>{review.role}</div>
+                        </div>
+                        <div style={{ marginLeft: 'auto', display: 'flex', gap: '2px', color: 'var(--accent-amber)' }}>
+                          {[1,2,3,4,5].map(star => <Star key={star} size={10} fill="currentColor" />)}
+                        </div>
+                      </div>
+                      <p style={{ margin: 0, fontSize: '11px', color: 'rgba(255,255,255,0.7)', lineHeight: 1.5, textAlign: 'left', fontStyle: 'italic' }}>
+                        {review.text}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           )}
 
