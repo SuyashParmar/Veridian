@@ -138,6 +138,8 @@ body {
 .dossier-layout {
   display: flex;
   height: calc(100vh - 36px);
+  position: relative;
+  overflow-x: hidden;
 }
 
 .sidebar-scanner {
@@ -147,11 +149,47 @@ body {
   border-right: 1px solid var(--border-glass);
   padding: 1.75rem 1.5rem;
   overflow-y: auto;
+  transition: margin-left 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-left: 0;
 }
+.sidebar-scanner.sidebar-closed {
+  margin-left: -540px;
+}
+
+/* Sidebar Toggle */
+.sidebar-toggle-btn {
+  position: absolute;
+  top: 50%;
+  left: 540px;
+  transform: translateY(-50%);
+  z-index: 50;
+  width: 24px;
+  height: 64px;
+  background: rgba(8, 8, 14, 0.9);
+  border: 1px solid var(--border-glass);
+  border-left: none;
+  border-radius: 0 8px 8px 0;
+  color: var(--text-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1), background 0.2s, color 0.2s;
+  backdrop-filter: blur(10px);
+}
+.sidebar-toggle-btn:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--text-white);
+}
+.sidebar-toggle-btn.closed {
+  left: 0;
+}
+
 .main-stage {
   flex-grow: 1;
   padding: 2.5rem 3rem;
   overflow-y: auto;
+  transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ── Logo badge ── */

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000';
-import { ShieldCheck, Info, Activity, User, Zap, Fingerprint, Scale, Monitor, Terminal, Layers, Star } from 'lucide-react';
+import { ShieldCheck, Info, Activity, User, Zap, Fingerprint, Scale, Monitor, Terminal, Layers, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import StatusBar from './components/StatusBar';
 import RiskGauge from './components/RiskGauge';
 import FeatureChart from './components/FeatureChart';
@@ -30,6 +30,7 @@ const FAKE_REVIEWS = [
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'insight'|'whatif'|'trust'|'governance'>('insight');
+  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string|null>(null);
   const [result, setResult] = useState<PredictionData|null>(null);
@@ -67,6 +68,7 @@ const App: React.FC = () => {
         confidence: data.confidence_score, model: formData.model_choice, isOod: data.is_ood,
       });
       setLatestEntry(entry);
+      setIsSidebarOpen(false);
     } catch (err: any) {
       setError(err.message || 'UPLINK FAILURE: DATA SYNC INTERRUPTED');
     } finally {
@@ -100,8 +102,17 @@ const App: React.FC = () => {
         </div>
         <div className="pulse-bg" />
 
+        {/* Sidebar Toggle Button */}
+        <button 
+          className={`sidebar-toggle-btn ${isSidebarOpen ? '' : 'closed'}`}
+          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+          title={isSidebarOpen ? "Collapse Sidebar" : "Expand Sidebar"}
+        >
+          {isSidebarOpen ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
+        </button>
+
         {/* Sidebar */}
-        <aside className="sidebar-scanner">
+        <aside className={`sidebar-scanner ${isSidebarOpen ? '' : 'sidebar-closed'}`}>
           <div className="flex items-center gap-3 mb-8">
             <div className="logo-badge">V</div>
             <div>
