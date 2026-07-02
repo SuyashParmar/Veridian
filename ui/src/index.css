@@ -165,21 +165,22 @@ body {
   z-index: 50;
   width: 24px;
   height: 64px;
-  background: rgba(8, 8, 14, 0.9);
-  border: 1px solid var(--border-glass);
+  background: white;
+  border: 1px solid white;
   border-left: none;
   border-radius: 0 8px 8px 0;
-  color: var(--text-dim);
+  color: black;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   transition: left 0.5s cubic-bezier(0.4, 0, 0.2, 1), background 0.2s, color 0.2s;
   backdrop-filter: blur(10px);
+  box-shadow: 0 0 10px rgba(255,255,255,0.2);
 }
 .sidebar-toggle-btn:hover {
-  background: rgba(255,255,255,0.08);
-  color: var(--text-white);
+  background: #e4e4e7;
+  color: black;
 }
 .sidebar-toggle-btn.closed {
   left: 0;
