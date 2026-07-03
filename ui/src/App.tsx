@@ -30,7 +30,7 @@ const FAKE_REVIEWS = [
 
 const App: React.FC = () => {
   const [activeTab, setActiveTab] = useState<'insight'|'whatif'|'trust'|'governance'>('insight');
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(window.innerWidth > 1024);
   const [showScrollArrow, setShowScrollArrow] = useState(false);
   const mainStageRef = useRef<HTMLElement>(null);
   const [loading, setLoading] = useState(false);
@@ -111,13 +111,15 @@ const App: React.FC = () => {
         <div className="pulse-bg" />
 
         {/* Sidebar Toggle Button */}
-        <button 
-          className={`sidebar-toggle-btn ${isSidebarOpen ? '' : 'closed'}`}
-          onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          title={isSidebarOpen ? "Collapse Sidebar" : "Expand Sidebar"}
-        >
-          {isSidebarOpen ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
-        </button>
+        {(result || isSidebarOpen) && (
+          <button 
+            className={`sidebar-toggle-btn ${isSidebarOpen ? '' : 'closed'}`}
+            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+            title={isSidebarOpen ? "Collapse Sidebar" : "Expand Sidebar"}
+          >
+            {isSidebarOpen ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
+          </button>
+        )}
 
         {/* Sidebar */}
         <aside className={`sidebar-scanner ${isSidebarOpen ? '' : 'sidebar-closed'}`}>
@@ -222,16 +224,18 @@ const App: React.FC = () => {
           )}
 
           {/* Nav */}
-          <div style={{ display:'flex', gap:'0.5rem', marginBottom:'2rem' }}>
-            {(['insight','whatif','trust','governance'] as const).map(tab => (
-              <button key={tab} onClick={() => {
-                setActiveTab(tab);
-                if (tab !== 'insight' && result) setShowScrollArrow(true);
-              }} className={`nav-tab ${activeTab===tab?'active':''}`}>
-                {tab === 'insight' ? 'Insight' : tab === 'whatif' ? 'Simulator' : tab === 'trust' ? 'X-Ray' : 'Logs'}
-              </button>
-            ))}
-          </div>
+          {result && (
+            <div style={{ display:'flex', gap:'0.5rem', marginBottom:'2rem', flexWrap:'wrap' }}>
+              {(['insight','whatif','trust','governance'] as const).map(tab => (
+                <button key={tab} onClick={() => {
+                  setActiveTab(tab);
+                  if (tab !== 'insight' && result) setShowScrollArrow(true);
+                }} className={`nav-tab ${activeTab===tab?'active':''}`}>
+                  {tab === 'insight' ? 'Insight' : tab === 'whatif' ? 'Simulator' : tab === 'trust' ? 'X-Ray' : 'Logs'}
+                </button>
+              ))}
+            </div>
+          )}
 
           {error && (
             <div className="glass-dossier fade-up" style={{ marginBottom:'1.5rem', padding:'1.25rem 1.5rem', borderColor:'rgba(244,63,94,0.3)', background:'rgba(244,63,94,0.06)', display:'flex', alignItems:'center', gap:'1rem' }}>
@@ -244,18 +248,32 @@ const App: React.FC = () => {
           )}
 
           {!result && !loading && (
-            <div className="fade-up" style={{ height:'100%', position:'relative', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', textAlign:'center', gap:'1rem' }}>
-              <div style={{ transform: 'translateY(-60px)' }}>
-                <Layers size={60} style={{ color:'#27272a', animation:'none', margin:'0 auto 1rem' }} strokeWidth={1} />
-                <h2 style={{ margin:0, fontSize:'22px', fontWeight:800, letterSpacing:'-0.5px' }}>
-                  {activeTab === 'insight' ? 'AUTHENTICATION REQUIRED' : 
-                   activeTab === 'whatif' ? 'SIMULATOR OFFLINE' : 
-                   activeTab === 'trust' ? 'X-RAY OFFLINE' : 'LOGS UNAVAILABLE'}
-                </h2>
-                <p style={{ margin:'1rem auto 0', fontSize:'13px', color:'var(--text-dim)', maxWidth:'320px', lineHeight:1.6 }}>
-                  {activeTab === 'insight' ? 'Input applicant parameters and trigger a scan to initialize intelligence feedback.' :
-                   `Run a profile scan first to access the ${activeTab === 'whatif' ? 'Simulator' : activeTab === 'trust' ? 'X-Ray' : 'Governance Logs'} panel.`}
+            <div className="fade-up" style={{ height:'100%', position:'relative', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'space-between', textAlign:'center', gap:'1rem' }}>
+              <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '2rem', paddingBottom: '8rem' }}>
+                
+                {/* Brand Logo */}
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
+                  <div className="logo-badge" style={{ width: '80px', height: '80px', fontSize: '32px', borderRadius: '24px' }}>V</div>
+                  <div>
+                    <h1 style={{ margin:0, fontSize:'32px', fontWeight:900, letterSpacing:'-1px' }}>VERIDIAN</h1>
+                  </div>
+                </div>
+
+                {/* Highlighted Title */}
+                <div style={{ padding: '1rem 2rem', background: 'rgba(99,102,241,0.05)', border: '1px solid rgba(99,102,241,0.2)', borderRadius: '16px', boxShadow: '0 0 30px rgba(99,102,241,0.1)' }}>
+                  <h2 style={{ margin:0, fontSize:'16px', fontWeight:800, color: 'var(--text-white)', letterSpacing:'0.2em', textTransform: 'uppercase' }}>
+                    Intelligence Platform <br/><span style={{ color: 'var(--accent-cyan)' }}>Applicant Profile</span>
+                  </h2>
+                </div>
+
+                <p style={{ margin:0, fontSize:'14px', color:'var(--text-dim)', maxWidth:'420px', lineHeight:1.6 }}>
+                  Input applicant parameters and trigger a neural scan to initialize intelligence feedback, counterfactuals, and trust metrics.
                 </p>
+
+                {/* Big Trigger Button */}
+                <button className="analyze-button" style={{ maxWidth: '300px', padding: '1.25rem', fontSize: '14px', marginTop: '1rem' }} onClick={() => setIsSidebarOpen(true)}>
+                  Run Profile Scans
+                </button>
               </div>
 
               {/* Reviews Marquee */}
