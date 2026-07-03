@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 
 const API_URL = import.meta.env.VITE_API_URL ?? 'http://localhost:8000';
-import { ShieldCheck, Info, Activity, User, Zap, Fingerprint, Scale, Monitor, Terminal, Layers, Star, ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
+import { ShieldCheck, Info, Activity, User, Zap, Fingerprint, Scale, Monitor, Terminal, Star, ChevronLeft, ChevronRight, ChevronDown } from 'lucide-react';
 import StatusBar from './components/StatusBar';
 import RiskGauge from './components/RiskGauge';
 import FeatureChart from './components/FeatureChart';
