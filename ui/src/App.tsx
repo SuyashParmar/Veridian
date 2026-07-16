@@ -248,7 +248,7 @@ const App: React.FC = () => {
           )}
 
           {!result && !loading && (
-            <div className="fade-up" style={{ height:'100%', position:'relative', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'space-between', textAlign:'center', gap:'1rem' }}>
+            <div className="fade-up" style={{ minHeight:'100%', position:'relative', display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'space-between', textAlign:'center', gap:'1rem' }}>
               <div style={{ flexGrow: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: '2rem', paddingBottom: '8rem' }}>
                 
                 {/* Brand Logo */}
