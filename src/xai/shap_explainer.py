@@ -50,7 +50,7 @@ class SHAPExplainer:
         try:
             # 1. Generate SHAP values
             if isinstance(self.explainer, shap.KernelExplainer):
-                shap_raw = self.explainer.shap_values(instance, nsamples="auto")
+                shap_raw = self.explainer.shap_values(instance, nsamples=100)
             else:
                 shap_raw = self.explainer.shap_values(instance)
                 
